@@ -1,0 +1,40 @@
+// 🔥 تحميل الأفلام من السيرفر
+async function loadMovies() {
+    try {
+        const res = await fetch("https://YOUR-SERVER-URL.onrender.com/movies");
+        const movies = await res.json();
+
+        const container = document.getElementById("movies");
+        container.innerHTML = "";
+
+        movies.forEach(movie => {
+            container.innerHTML += `
+                <div class="card" onclick="playMovie('${movie.url}')">
+                    <video src="https://YOUR-SERVER-URL.onrender.com${movie.url}" style="width:100%; border-radius:10px;"></video>
+                    <p style="text-align:center">${movie.name}</p>
+                </div>
+            `;
+        });
+
+    } catch (err) {
+        console.log("Error loading movies", err);
+    }
+}
+
+// ▶️ تشغيل الفيلم
+function playMovie(url) {
+    const modal = document.getElementById("modal");
+    const video = document.getElementById("videoPlayer");
+
+    video.src = "https://YOUR-SERVER-URL.onrender.com" + url;
+    modal.style.display = "flex";
+}
+
+// ❌ غلق المشغل
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("videoPlayer").pause();
+}
+
+// 🚀 تشغيل أول ما الصفحة تفتح
+window.onload = loadMovies;
